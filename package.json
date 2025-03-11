@@ -1,0 +1,29 @@
+{
+  "name": "@shopify/dev-mcp",
+  "version": "1.0.0",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "tsc && node -e \"require('fs').chmodSync('build/index.js', '755')\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.6.1",
+    "eventsource-parser": "^1.0.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/inspector": "^0.5.1",
+    "@types/node": "^22.13.10",
+    "typescript": "^5.8.2"
+  },
+  "type": "module",
+  "bin": {
+    "dev-mcp": "./build/index.js"
+  },
+  "files": [
+    "build"
+  ]
+}
