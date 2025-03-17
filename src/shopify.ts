@@ -4,7 +4,7 @@ import fs from "fs/promises";
 import path from "path";
 
 // Top-level constants
-const SHOPIFY_BASE_URL = "https://shopify-dev.myshopify.io";
+const SHOPIFY_BASE_URL = "https://shopify.dev";
 
 // Path to the schema file in the data folder
 const SCHEMA_FILE_PATH = path.join(
@@ -43,7 +43,7 @@ export function shopifyTools(server: McpServer) {
   // Add a new tool to access and search the Shopify Admin GraphQL schema
   server.tool(
     "shopify-admin-schema",
-    "Access and search Shopify Admin GraphQL schema",
+    "Access and search Shopify Admin GraphQL schema. Only use this for the Shopify Admin API, not for other APIs like Storefront API or Functions API.",
     {
       query: z
         .string()

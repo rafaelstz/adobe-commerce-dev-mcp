@@ -2,7 +2,7 @@ import { z } from "zod";
 import fs from "fs/promises";
 import path from "path";
 // Top-level constants
-const SHOPIFY_BASE_URL = "https://shopify-dev.myshopify.io";
+const SHOPIFY_BASE_URL = "https://shopify.dev";
 // Path to the schema file in the data folder
 const SCHEMA_FILE_PATH = path.join(path.dirname(new URL(import.meta.url).pathname), "..", "data", "admin_schema_2025-01.json");
 // Helper function to filter, sort, and truncate schema items
@@ -25,7 +25,7 @@ const filterAndSortItems = (items, searchTerm, maxItems) => {
 };
 export function shopifyTools(server) {
     // Add a new tool to access and search the Shopify Admin GraphQL schema
-    server.tool("shopify-admin-schema", "Access and search Shopify Admin GraphQL schema", {
+    server.tool("shopify-admin-schema", "Access and search Shopify Admin GraphQL schema. Only use this for the Shopify Admin API, not for other APIs like Storefront API or Functions API.", {
         query: z
             .string()
             .describe("Search term to filter schema elements by name. Only pass simple terms like 'product', 'discountProduct', etc."),
