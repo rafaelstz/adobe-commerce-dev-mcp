@@ -15,7 +15,7 @@ export const SCHEMA_FILE_PATH = path.join(
 );
 
 // Maximum number of fields to extract from an object
-export const MAX_FIELDS_TO_SHOW = 30;
+export const MAX_FIELDS_TO_SHOW = 50;
 
 // Helper function to filter, sort, and truncate schema items
 export const filterAndSortItems = (
