@@ -8,7 +8,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "This project implements a Model Context Protocol (MCP) server that interacts with Shopify Dev's GraphQL API.",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.6.1",
     "eventsource-parser": "^1.0.0",
@@ -21,7 +21,7 @@
   },
   "type": "module",
   "bin": {
-    "dev-mcp": "./build/index.js"
+    "dev-mcp": "build/index.js"
   },
   "files": [
     "build"
