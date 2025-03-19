@@ -1,28 +1,6 @@
 import { z } from "zod";
-import fs from "fs/promises";
-import path from "path";
-// Top-level constants
+import { searchShopifyAdminSchema } from "./shopify-admin-schema.js";
 const SHOPIFY_BASE_URL = "https://shopify.dev";
-// Path to the schema file in the data folder
-const SCHEMA_FILE_PATH = path.join(path.dirname(new URL(import.meta.url).pathname), "..", "data", "admin_schema_2025-01.json");
-// Helper function to filter, sort, and truncate schema items
-const filterAndSortItems = (items, searchTerm, maxItems) => {
-    // Filter items based on search term
-    const filtered = items.filter((item) => item.name?.toLowerCase().includes(searchTerm));
-    // Sort filtered items by name length (shorter names first)
-    filtered.sort((a, b) => {
-        if (!a.name)
-            return 1;
-        if (!b.name)
-            return -1;
-        return a.name.length - b.name.length;
-    });
-    // Return truncation info and limited items
-    return {
-        wasTruncated: filtered.length > maxItems,
-        items: filtered.slice(0, maxItems),
-    };
-};
 export function shopifyTools(server) {
     // Add a new tool to access and search the Shopify Admin GraphQL schema
     server.tool("shopify-admin-schema", "Access and search Shopify Admin GraphQL schema. Only use this for the Shopify Admin API, not for other APIs like Storefront API or Functions API.", {
@@ -30,105 +8,23 @@ export function shopifyTools(server) {
             .string()
             .describe("Search term to filter schema elements by name. Only pass simple terms like 'product', 'discountProduct', etc."),
     }, async ({ query }, extra) => {
-        try {
-            console.error(`[shopify-admin-schema-tool] Reading GraphQL schema from ${SCHEMA_FILE_PATH}`);
-            // Read the schema file from the local filesystem
-            const schemaContent = await fs.readFile(SCHEMA_FILE_PATH, "utf8");
-            // Parse the schema content
-            const schemaJson = JSON.parse(schemaContent);
-            // If a query is provided, filter the schema
-            let resultSchema = schemaJson;
-            let wasTruncated = false;
-            let queriesWereTruncated = false;
-            let mutationsWereTruncated = false;
-            if (query && query.trim()) {
-                console.error(`[shopify-admin-schema-tool] Filtering schema with query: ${query}`);
-                // This is a simplified filtering approach - you might want to enhance this
-                // based on the actual structure of your schema
-                const searchTerm = query.toLowerCase();
-                // Example filtering logic (adjust based on actual schema structure)
-                // This assumes the schema has types with names and descriptions
-                if (schemaJson?.data?.__schema?.types) {
-                    const MAX_RESULTS = 10;
-                    // Process types
-                    const processedTypes = filterAndSortItems(schemaJson.data.__schema.types, searchTerm, MAX_RESULTS);
-                    wasTruncated = processedTypes.wasTruncated;
-                    const limitedTypes = processedTypes.items;
-                    // Find the Query and Mutation types
-                    const queryType = schemaJson.data.__schema.types.find((type) => type.name === "QueryRoot");
-                    const mutationType = schemaJson.data.__schema.types.find((type) => type.name === "Mutation");
-                    // Process queries if available
-                    let matchingQueries = [];
-                    if (queryType && queryType.fields) {
-                        const processedQueries = filterAndSortItems(queryType.fields, searchTerm, MAX_RESULTS);
-                        queriesWereTruncated = processedQueries.wasTruncated;
-                        matchingQueries = processedQueries.items;
-                    }
-                    // Process mutations if available
-                    let matchingMutations = [];
-                    if (mutationType && mutationType.fields) {
-                        const processedMutations = filterAndSortItems(mutationType.fields, searchTerm, MAX_RESULTS);
-                        mutationsWereTruncated = processedMutations.wasTruncated;
-                        matchingMutations = processedMutations.items;
-                    }
-                    // Create a modified schema that includes matching types
-                    resultSchema = {
-                        data: {
-                            __schema: {
-                                ...schemaJson.data.__schema,
-                                types: limitedTypes,
-                                matchingQueries,
-                                matchingMutations,
-                            },
-                        },
-                    };
-                }
-            }
-            // Create the response text with truncation message if needed
-            let responseText = "";
-            // Add types section
-            responseText += "Matching Types:\n";
-            if (wasTruncated) {
-                responseText += `(Results limited to 10 items. Refine your search for more specific results.)\n`;
-            }
-            responseText +=
-                resultSchema.data.__schema.types.length > 0
-                    ? JSON.stringify(resultSchema.data.__schema.types, null, 2) + "\n\n"
-                    : "No matching types found.\n\n";
-            // Add queries section
-            responseText += "Matching Queries:\n";
-            if (queriesWereTruncated) {
-                responseText += `(Results limited to 10 items. Refine your search for more specific results.)\n`;
-            }
-            responseText +=
-                resultSchema.data.__schema.matchingQueries?.length > 0
-                    ? JSON.stringify(resultSchema.data.__schema.matchingQueries, null, 2) + "\n\n"
-                    : "No matching queries found.\n\n";
-            // Add mutations section
-            responseText += "Matching Mutations:\n";
-            if (mutationsWereTruncated) {
-                responseText += `(Results limited to 10 items. Refine your search for more specific results.)\n`;
-            }
-            responseText +=
-                resultSchema.data.__schema.matchingMutations?.length > 0
-                    ? JSON.stringify(resultSchema.data.__schema.matchingMutations, null, 2)
-                    : "No matching mutations found.";
+        const result = await searchShopifyAdminSchema(query);
+        if (result.success) {
             return {
                 content: [
                     {
                         type: "text",
-                        text: responseText,
+                        text: result.responseText,
                     },
                 ],
             };
         }
-        catch (error) {
-            console.error(`[shopify-admin-schema-tool] Error processing GraphQL schema: ${error}`);
+        else {
             return {
                 content: [
                     {
                         type: "text",
-                        text: `Error processing Shopify Admin GraphQL schema: ${error instanceof Error ? error.message : String(error)}. Make sure the schema file exists at ${SCHEMA_FILE_PATH}`,
+                        text: `Error processing Shopify Admin GraphQL schema: ${result.error}. Make sure the schema file exists.`,
                     },
                 ],
             };
