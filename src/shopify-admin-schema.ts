@@ -139,7 +139,7 @@ export const formatSchemaType = (item: any): string => {
   return result;
 };
 
-export const formatQuery = (query: any): string => {
+export const formatGraphqlOperation = (query: any): string => {
   let result = `${query.name}`;
 
   if (query.description) {
@@ -287,7 +287,7 @@ export async function searchShopifyAdminSchema(query: string) {
     if (resultSchema.data.__schema.matchingQueries?.length > 0) {
       responseText +=
         resultSchema.data.__schema.matchingQueries
-          .map(formatQuery)
+          .map(formatGraphqlOperation)
           .join("\n\n") + "\n\n";
     } else {
       responseText += "No matching queries found.\n\n";
@@ -301,7 +301,7 @@ export async function searchShopifyAdminSchema(query: string) {
 
     if (resultSchema.data.__schema.matchingMutations?.length > 0) {
       responseText += resultSchema.data.__schema.matchingMutations
-        .map(formatQuery)
+        .map(formatGraphqlOperation)
         .join("\n\n");
     } else {
       responseText += "No matching mutations found.";

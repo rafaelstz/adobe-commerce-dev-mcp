@@ -18,7 +18,7 @@ import {
   formatArg,
   formatField,
   formatSchemaType,
-  formatQuery,
+  formatGraphqlOperation,
   searchShopifyAdminSchema,
   filterAndSortItems,
   MAX_FIELDS_TO_SHOW,
@@ -276,7 +276,7 @@ describe("formatSchemaType", () => {
   });
 });
 
-describe("formatQuery", () => {
+describe("formatGraphqlOperation", () => {
   test("formats query with arguments and return type", () => {
     const query = {
       name: "product",
@@ -295,7 +295,7 @@ describe("formatQuery", () => {
       type: { kind: "OBJECT", name: "Product", ofType: null },
     };
 
-    const result = formatQuery(query);
+    const result = formatGraphqlOperation(query);
     expect(result).toContain("product");
     expect(result).toContain("Description: Get a product by ID");
     expect(result).toContain("Arguments:");
@@ -313,7 +313,7 @@ describe("formatQuery", () => {
       type: { kind: "SCALAR", name: "String", ofType: null },
     };
 
-    const result = formatQuery(query);
+    const result = formatGraphqlOperation(query);
     expect(result).toContain("...");
     expect(result.length).toBeLessThan(longDescription.length);
   });
