@@ -1,16 +1,16 @@
 {
   "name": "@shopify/dev-mcp",
   "version": "1.0.0",
-  "main": "build/index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "build": "tsc && node -e \"require('fs').chmodSync('build/index.js', '755')\"",
+    "build": "tsc && node -e \"require('fs').chmodSync('dist/index.js', '755')\"",
     "test": "vitest run",
     "test:watch": "vitest"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "This project implements a Model Context Protocol (MCP) server that interacts with Shopify Dev's GraphQL API.",
+  "description": "A command line tool for setting up Shopify Dev MCP server",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.6.1",
     "eventsource-parser": "^1.0.0",
@@ -25,9 +25,13 @@
   },
   "type": "module",
   "bin": {
-    "dev-mcp": "build/index.js"
+    "dev-mcp": "dist/index.js"
   },
   "files": [
-    "build"
+    "dist/index.js",
+    "LICENSE",
+    "README.md",
+    "VERSION",
+    "package.json"
   ]
 }
