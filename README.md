@@ -1,43 +1,59 @@
 # Shopify Dev MCP Server
 
-This project implements a Model Context Protocol (MCP) server that interacts with Shopify Dev's GraphQL API.
+This project implements a Model Context Protocol (MCP) server that interacts with Shopify Dev. This protocol supports various tools to interact with different Shopify APIs.
 
-## Features
+## Setup
 
-- Communicate with Shopify Dev's GraphQL operations API
-- Proper handling of Server-Sent Events (SSE) response format
-
-## Installation
+To run the Shopify MCP server using npx, use the following command:
 
 ```bash
-npm install
-npm run build
+npx -y @shopify/dev-mcp
 ```
 
-## Usage
+## Usage with Cursor or Claude Desktop
 
-The MCP server exposes a single tool:
+Add the following configuration. See [here](https://docs.cursor.com/context/model-context-protocol) and [here](https://modelcontextprotocol.io/quickstart/user) for more details.
 
-### shopify-gql
-
-Interact with the Shopify Dev GraphQL API by sending prompts.
-
-**Parameters:**
-
-- `prompt` (required): The prompt to send to Shopify Dev
-
-**Example usage with Claude:**
-
+```json
+{
+  "mcpServers": {
+    "shopify-dev-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@shopify/dev-mcp"
+      ]
+    }
+  }
+}
 ```
-I need help with Shopify's GraphQL API. Can you show me how to query products?
-```
+
+## Available tools
+
+This MCP server provides the following tools:
+
+| Tool Name | Description |
+|-----------|-------------|
+| search-dev-docs | Search shopify.dev documentation |
+| introspect-admin-schema | Access and search Shopify Admin GraphQL schema|
+
+## Available prompts
+
+This MCP server provides the following prompts:
+
+| Prompt Name | Description |
+|-------------|-------------|
+| shopify-admin-graphql | Help you write GraphQL operations for the Shopify Admin API |
 
 ## Development
 
-The server is built using the MCP SDK and communicates with Shopify Dev's GraphQL API. To extend or modify:
+The server is built using the MCP SDK and communicates with Shopify Dev.
 
-1. Modify `src/shopify.ts` to change tool behavior
-2. Run `npm run build` to compile
+1. `npm install`
+1. Modify source files
+1. Run `npm run build` to compile
+1. Run `npm run test` to run tests
+1. Add an MCP server that runs this command: `node <absolute_path_of_project>/dist/index.js`
 
 ## License
 

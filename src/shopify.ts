@@ -89,8 +89,8 @@ export async function searchShopifyDocs(prompt: string) {
 export function shopifyTools(server: McpServer) {
   // Add a new tool to access and search the Shopify Admin GraphQL schema
   server.tool(
-    "shopify-admin-schema",
-    "Access and search Shopify Admin GraphQL schema. Only use this for the Shopify Admin API, not for other APIs like Storefront API or Functions API.",
+    "introspect-admin-schema",
+    "Introspect the Shopify Admin GraphQL schema. Only use this for the Shopify Admin API, not for other APIs like Storefront API or Functions API.",
     {
       query: z
         .string()
@@ -124,8 +124,8 @@ export function shopifyTools(server: McpServer) {
   );
 
   server.tool(
-    "shopify-docs",
-    "Search Shopify documentation",
+    "search-dev-docs",
+    "Search Shopify developer documentation",
     {
       prompt: z.string().describe("The search query for Shopify documentation"),
     },
