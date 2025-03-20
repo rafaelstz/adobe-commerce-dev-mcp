@@ -7,7 +7,7 @@ This project implements a Model Context Protocol (MCP) server that interacts wit
 To run the Shopify MCP server using npx, use the following command:
 
 ```bash
-npx -y @shopify/dev-mcp
+npx -y @shopify/dev-mcp@latest
 ```
 
 ## Usage with Cursor or Claude Desktop
@@ -21,7 +21,7 @@ Add the following configuration. See [here](https://docs.cursor.com/context/mode
       "command": "npx",
       "args": [
         "-y",
-        "@shopify/dev-mcp"
+        "@shopify/dev-mcp@latest"
       ]
     }
   }
