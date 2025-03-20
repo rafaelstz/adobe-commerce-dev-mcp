@@ -25,13 +25,12 @@
   },
   "type": "module",
   "bin": {
-    "dev-mcp": "dist/index.js"
+    "shopify-dev-mcp": "dist/index.js"
   },
   "files": [
-    "dist/index.js",
+    "dist",
     "LICENSE",
     "README.md",
-    "VERSION",
     "package.json"
   ]
 }
