@@ -23,7 +23,7 @@ export async function searchShopifyDocs(prompt: string) {
       headers: {
         Accept: "application/json",
         "Cache-Control": "no-cache",
-        "X-Shopify-Surface": "vscode",
+        "X-Shopify-Surface": "mcp",
       },
     });
 
