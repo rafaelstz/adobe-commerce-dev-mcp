@@ -33,5 +33,10 @@
     "LICENSE",
     "README.md",
     "package.json"
+  ],
+  "keywords": [
+    "mcp",
+    "modelcontextprotocol",
+    "shopify"
   ]
 }
