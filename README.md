@@ -12,7 +12,7 @@ npx -y @shopify/dev-mcp@latest
 
 ## Usage with Cursor or Claude Desktop
 
-Add the following configuration. See [here](https://docs.cursor.com/context/model-context-protocol) and [here](https://modelcontextprotocol.io/quickstart/user) for more details.
+Add the following configuration. For more information, read the [Cursor MCP documentation](https://docs.cursor.com/context/model-context-protocol) or the [Claude Desktop MCP guide](https://modelcontextprotocol.io/quickstart/user).
 
 ```json
 {
