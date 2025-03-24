@@ -16,30 +16,30 @@ export const SCHEMA_FILE_PATH = path.join(
   "admin_schema_2025-01.json"
 );
 
-export const GZIPPED_SCHEMA_FILE_PATH = `${SCHEMA_FILE_PATH}.gz`;
-
 // Function to load schema content, handling decompression if needed
-export async function loadSchemaContent(): Promise<string> {
+export async function loadSchemaContent(schemaPath: string): Promise<string> {
+  const gzippedSchemaPath = `${schemaPath}.gz`;
+
   // If uncompressed file doesn't exist but gzipped does, decompress it
-  if (!existsSync(SCHEMA_FILE_PATH) && existsSync(GZIPPED_SCHEMA_FILE_PATH)) {
+  if (!existsSync(schemaPath) && existsSync(gzippedSchemaPath)) {
     console.error(
-      `[shopify-admin-schema-tool] Decompressing GraphQL schema from ${GZIPPED_SCHEMA_FILE_PATH}`
+      `[shopify-admin-schema-tool] Decompressing GraphQL schema from ${gzippedSchemaPath}`
     );
-    const compressedData = await fs.readFile(GZIPPED_SCHEMA_FILE_PATH);
+    const compressedData = await fs.readFile(gzippedSchemaPath);
     const schemaContent = zlib.gunzipSync(compressedData).toString("utf-8");
 
     // Save the uncompressed content to disk
-    await fs.writeFile(SCHEMA_FILE_PATH, schemaContent, "utf-8");
+    await fs.writeFile(schemaPath, schemaContent, "utf-8");
     console.error(
-      `[shopify-admin-schema-tool] Saved uncompressed schema to ${SCHEMA_FILE_PATH}`
+      `[shopify-admin-schema-tool] Saved uncompressed schema to ${schemaPath}`
     );
     return schemaContent;
   }
 
   console.error(
-    `[shopify-admin-schema-tool] Reading GraphQL schema from ${SCHEMA_FILE_PATH}`
+    `[shopify-admin-schema-tool] Reading GraphQL schema from ${schemaPath}`
   );
-  return fs.readFile(SCHEMA_FILE_PATH, "utf8");
+  return fs.readFile(schemaPath, "utf8");
 }
 
 // Maximum number of fields to extract from an object
@@ -198,8 +198,7 @@ export const formatGraphqlOperation = (query: any): string => {
 // Function to search and format schema data
 export async function searchShopifyAdminSchema(query: string) {
   try {
-    debugger;
-    const schemaContent = await loadSchemaContent();
+    const schemaContent = await loadSchemaContent(SCHEMA_FILE_PATH);
 
     // Parse the schema content
     const schemaJson = JSON.parse(schemaContent);
