@@ -29,7 +29,7 @@
   "files": [
     "dist/**/*.js",
     "!dist/**/*.test.*",
-    "data",
+    "data/**/*.json.gz",
     "LICENSE",
     "README.md",
     "package.json"

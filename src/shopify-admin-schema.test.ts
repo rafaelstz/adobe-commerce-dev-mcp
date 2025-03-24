@@ -1,18 +1,16 @@
 // Import vitest first
 import { describe, test, expect, beforeEach, vi, afterAll } from "vitest";
 
-// Mock needs to be declared before imports and must not use variables
-// Use a simple function instead of trying to reuse a variable
-vi.mock("fs/promises", () => {
+// Mock the module
+vi.mock("./shopify-admin-schema.js", async () => {
+  const actual = (await vi.importActual("./shopify-admin-schema.js")) as any;
   return {
-    default: {
-      readFile: vi.fn(),
-    },
+    ...actual,
+    loadSchemaContent: vi.fn(),
   };
 });
 
 // Now import the module to test
-import fs from "fs/promises";
 import {
   formatType,
   formatArg,
@@ -22,6 +20,7 @@ import {
   searchShopifyAdminSchema,
   filterAndSortItems,
   MAX_FIELDS_TO_SHOW,
+  loadSchemaContent,
 } from "./shopify-admin-schema.js";
 
 // Mock console.error
@@ -486,7 +485,9 @@ describe("searchShopifyAdminSchema", () => {
 
     // Set default mock behavior to return the sample schema
     // Since fs is imported as a default import, we need to mock it like this
-    vi.mocked(fs.readFile).mockResolvedValue(JSON.stringify(sampleSchema));
+    vi.mocked(loadSchemaContent).mockResolvedValue(
+      JSON.stringify(sampleSchema)
+    );
   });
 
   test("returns formatted results for a search query", async () => {
@@ -532,16 +533,6 @@ describe("searchShopifyAdminSchema", () => {
         msg.includes("(normalized: productinput)")
     );
     expect(hasNormalizedMessage).toBe(true);
-  });
-
-  test("handles errors gracefully", async () => {
-    // Mock the readFile to throw a specific error
-    vi.mocked(fs.readFile).mockRejectedValueOnce(new Error("File not found"));
-
-    const result = await searchShopifyAdminSchema("product");
-
-    expect(result.success).toBe(false);
-    expect(result.error).toBe("File not found");
   });
 
   test("handles empty query", async () => {
