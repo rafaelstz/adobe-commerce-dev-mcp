@@ -70,7 +70,7 @@ export const filterAndSortItems = (
   };
 };
 
-// Helper functions to format GraphQL schema objects as plain text
+// Helper functions to format GraphQL schema types as plain text
 export const formatType = (type: any): string => {
   if (!type) return "null";
 
@@ -196,7 +196,12 @@ export const formatGraphqlOperation = (query: any): string => {
 };
 
 // Function to search and format schema data
-export async function searchShopifyAdminSchema(query: string) {
+export async function searchShopifyAdminSchema(
+  query: string,
+  {
+    filter = ["all"],
+  }: { filter?: Array<"all" | "types" | "queries" | "mutations"> } = {}
+) {
   try {
     const schemaContent = await loadSchemaContent(SCHEMA_FILE_PATH);
 
@@ -246,7 +251,11 @@ export async function searchShopifyAdminSchema(query: string) {
 
         // Process queries if available
         let matchingQueries: any[] = [];
-        if (queryType && queryType.fields) {
+        if (
+          queryType &&
+          queryType.fields &&
+          (filter.includes("all") || filter.includes("queries"))
+        ) {
           const processedQueries = filterAndSortItems(
             queryType.fields,
             searchTerm,
@@ -258,7 +267,11 @@ export async function searchShopifyAdminSchema(query: string) {
 
         // Process mutations if available
         let matchingMutations: any[] = [];
-        if (mutationType && mutationType.fields) {
+        if (
+          mutationType &&
+          mutationType.fields &&
+          (filter.includes("all") || filter.includes("mutations"))
+        ) {
           const processedMutations = filterAndSortItems(
             mutationType.fields,
             searchTerm,
@@ -285,47 +298,52 @@ export async function searchShopifyAdminSchema(query: string) {
     // Create the response text with truncation message if needed
     let responseText = "";
 
-    // Add types section
-    responseText += "## Matching GraphQL Types:\n";
-    if (wasTruncated) {
-      responseText += `(Results limited to 10 items. Refine your search for more specific results.)\n\n`;
+    if (filter.includes("all") || filter.includes("types")) {
+      responseText += "## Matching GraphQL Types:\n";
+      if (wasTruncated) {
+        responseText += `(Results limited to 10 items. Refine your search for more specific results.)\n\n`;
+      }
+
+      if (resultSchema.data.__schema.types.length > 0) {
+        responseText +=
+          resultSchema.data.__schema.types.map(formatSchemaType).join("\n\n") +
+          "\n\n";
+      } else {
+        responseText += "No matching types found.\n\n";
+      }
     }
 
-    if (resultSchema.data.__schema.types.length > 0) {
-      responseText +=
-        resultSchema.data.__schema.types.map(formatSchemaType).join("\n\n") +
-        "\n\n";
-    } else {
-      responseText += "No matching types found.\n\n";
+    // Add queries section if showing all or queries
+    if (filter.includes("all") || filter.includes("queries")) {
+      responseText += "## Matching GraphQL Queries:\n";
+      if (queriesWereTruncated) {
+        responseText += `(Results limited to 10 items. Refine your search for more specific results.)\n\n`;
+      }
+
+      if (resultSchema.data.__schema.matchingQueries?.length > 0) {
+        responseText +=
+          resultSchema.data.__schema.matchingQueries
+            .map(formatGraphqlOperation)
+            .join("\n\n") + "\n\n";
+      } else {
+        responseText += "No matching queries found.\n\n";
+      }
     }
 
-    // Add queries section
-    responseText += "## Matching GraphQL Queries:\n";
-    if (queriesWereTruncated) {
-      responseText += `(Results limited to 10 items. Refine your search for more specific results.)\n\n`;
-    }
+    // Add mutations section if showing all or mutations
+    if (filter.includes("all") || filter.includes("mutations")) {
+      responseText += "## Matching GraphQL Mutations:\n";
+      if (mutationsWereTruncated) {
+        responseText += `(Results limited to 10 items. Refine your search for more specific results.)\n\n`;
+      }
 
-    if (resultSchema.data.__schema.matchingQueries?.length > 0) {
-      responseText +=
-        resultSchema.data.__schema.matchingQueries
+      if (resultSchema.data.__schema.matchingMutations?.length > 0) {
+        responseText += resultSchema.data.__schema.matchingMutations
           .map(formatGraphqlOperation)
-          .join("\n\n") + "\n\n";
-    } else {
-      responseText += "No matching queries found.\n\n";
-    }
-
-    // Add mutations section
-    responseText += "## Matching GraphQL Mutations:\n";
-    if (mutationsWereTruncated) {
-      responseText += `(Results limited to 10 items. Refine your search for more specific results.)\n\n`;
-    }
-
-    if (resultSchema.data.__schema.matchingMutations?.length > 0) {
-      responseText += resultSchema.data.__schema.matchingMutations
-        .map(formatGraphqlOperation)
-        .join("\n\n");
-    } else {
-      responseText += "No matching mutations found.";
+          .join("\n\n");
+      } else {
+        responseText += "No matching mutations found.";
+      }
     }
 
     return { success: true as const, responseText };

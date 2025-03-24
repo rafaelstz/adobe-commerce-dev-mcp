@@ -87,7 +87,6 @@ export async function searchShopifyDocs(prompt: string) {
 }
 
 export function shopifyTools(server: McpServer) {
-  // Add a new tool to access and search the Shopify Admin GraphQL schema
   server.tool(
     "introspect-admin-schema",
     "Introspect the Shopify Admin GraphQL schema. Only use this for the Shopify Admin API, not for other APIs like Storefront API or Functions API.",
@@ -97,9 +96,16 @@ export function shopifyTools(server: McpServer) {
         .describe(
           "Search term to filter schema elements by name. Only pass simple terms like 'product', 'discountProduct', etc."
         ),
+      filter: z
+        .array(z.enum(["all", "types", "queries", "mutations"]))
+        .optional()
+        .default(["all"])
+        .describe(
+          "Filter results to show specific sections. Can include 'types', 'queries', 'mutations', or 'all' (default)"
+        ),
     },
-    async ({ query }, extra) => {
-      const result = await searchShopifyAdminSchema(query);
+    async ({ query, filter }, extra) => {
+      const result = await searchShopifyAdminSchema(query, { filter });
 
       if (result.success) {
         return {

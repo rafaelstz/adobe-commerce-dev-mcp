@@ -543,4 +543,96 @@ describe("searchShopifyAdminSchema", () => {
     expect(result.responseText).toContain("OBJECT Product");
     expect(result.responseText).toContain("OBJECT Order");
   });
+
+  test("filters results to show only types", async () => {
+    const result = await searchShopifyAdminSchema("product", {
+      filter: ["types"],
+    });
+
+    expect(result.success).toBe(true);
+    // Should include types section
+    expect(result.responseText).toContain("## Matching GraphQL Types:");
+    expect(result.responseText).toContain("OBJECT Product");
+    expect(result.responseText).toContain("INPUT_OBJECT ProductInput");
+    // Should not include other sections
+    expect(result.responseText).not.toContain("## Matching GraphQL Queries:");
+    expect(result.responseText).not.toContain("## Matching GraphQL Mutations:");
+  });
+
+  test("filters results to show only queries", async () => {
+    const result = await searchShopifyAdminSchema("product", {
+      filter: ["queries"],
+    });
+
+    expect(result.success).toBe(true);
+    // Should not include types section
+    expect(result.responseText).not.toContain("## Matching GraphQL Types:");
+    // Should include queries section
+    expect(result.responseText).toContain("## Matching GraphQL Queries:");
+    expect(result.responseText).toContain("product");
+    // Should not include mutations section
+    expect(result.responseText).not.toContain("## Matching GraphQL Mutations:");
+    expect(result.responseText).not.toContain("productCreate");
+  });
+
+  test("filters results to show only mutations", async () => {
+    const result = await searchShopifyAdminSchema("product", {
+      filter: ["mutations"],
+    });
+
+    expect(result.success).toBe(true);
+    // Should not include types section
+    expect(result.responseText).not.toContain("## Matching GraphQL Types:");
+    // Should not include queries section
+    expect(result.responseText).not.toContain("## Matching GraphQL Queries:");
+    // Should include mutations section
+    expect(result.responseText).toContain("## Matching GraphQL Mutations:");
+    expect(result.responseText).toContain("productCreate");
+  });
+
+  test("shows all sections when operationType is 'all'", async () => {
+    const result = await searchShopifyAdminSchema("product", {
+      filter: ["all"],
+    });
+
+    expect(result.success).toBe(true);
+    // Should include all sections
+    expect(result.responseText).toContain("## Matching GraphQL Types:");
+    expect(result.responseText).toContain("OBJECT Product");
+    expect(result.responseText).toContain("INPUT_OBJECT ProductInput");
+    expect(result.responseText).toContain("## Matching GraphQL Queries:");
+    expect(result.responseText).toContain("product");
+    expect(result.responseText).toContain("## Matching GraphQL Mutations:");
+    expect(result.responseText).toContain("productCreate");
+  });
+
+  test("defaults to showing all sections when filter is not provided", async () => {
+    const result = await searchShopifyAdminSchema("product");
+
+    expect(result.success).toBe(true);
+    // Should include all sections
+    expect(result.responseText).toContain("## Matching GraphQL Types:");
+    expect(result.responseText).toContain("OBJECT Product");
+    expect(result.responseText).toContain("INPUT_OBJECT ProductInput");
+    expect(result.responseText).toContain("## Matching GraphQL Queries:");
+    expect(result.responseText).toContain("product");
+    expect(result.responseText).toContain("## Matching GraphQL Mutations:");
+    expect(result.responseText).toContain("productCreate");
+  });
+
+  test("can show multiple sections with array of filters", async () => {
+    const result = await searchShopifyAdminSchema("product", {
+      filter: ["queries", "mutations"],
+    });
+
+    expect(result.success).toBe(true);
+    // Should not include types section
+    expect(result.responseText).not.toContain("## Matching GraphQL Types:");
+    // Should include queries section
+    expect(result.responseText).toContain("## Matching GraphQL Queries:");
+    expect(result.responseText).toContain("product");
+    // Should include mutations section
+    expect(result.responseText).toContain("## Matching GraphQL Mutations:");
+    expect(result.responseText).toContain("productCreate");
+  });
 });
