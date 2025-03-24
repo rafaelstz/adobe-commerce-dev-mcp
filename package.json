@@ -7,7 +7,6 @@
     "test": "vitest run",
     "test:watch": "vitest"
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "A command line tool for setting up Shopify Dev MCP server",
@@ -28,7 +27,8 @@
     "shopify-dev-mcp": "dist/index.js"
   },
   "files": [
-    "dist",
+    "dist/**/*.js",
+    "!dist/**/*.test.*",
     "data",
     "LICENSE",
     "README.md",
