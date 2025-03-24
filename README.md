@@ -19,10 +19,20 @@ Add the following configuration. For more information, read the [Cursor MCP docu
   "mcpServers": {
     "shopify-dev-mcp": {
       "command": "npx",
-      "args": [
-        "-y",
-        "@shopify/dev-mcp@latest"
-      ]
+      "args": ["-y", "@shopify/dev-mcp@latest"]
+    }
+  }
+}
+```
+
+On Windows, you might need to use this alternative configuration:
+
+```json
+{
+  "mcpServers": {
+    "shopify-dev-mcp": {
+      "command": "cmd",
+      "args": ["/k", "npx", "-y", "@shopify/dev-mcp@latest"]
     }
   }
 }
@@ -32,17 +42,17 @@ Add the following configuration. For more information, read the [Cursor MCP docu
 
 This MCP server provides the following tools:
 
-| Tool Name | Description |
-|-----------|-------------|
-| search-dev-docs | Search shopify.dev documentation |
-| introspect-admin-schema | Access and search Shopify Admin GraphQL schema|
+| Tool Name               | Description                                    |
+| ----------------------- | ---------------------------------------------- |
+| search-dev-docs         | Search shopify.dev documentation               |
+| introspect-admin-schema | Access and search Shopify Admin GraphQL schema |
 
 ## Available prompts
 
 This MCP server provides the following prompts:
 
-| Prompt Name | Description |
-|-------------|-------------|
+| Prompt Name           | Description                                                 |
+| --------------------- | ----------------------------------------------------------- |
 | shopify-admin-graphql | Help you write GraphQL operations for the Shopify Admin API |
 
 ## Development
