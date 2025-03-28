@@ -44,8 +44,8 @@ This MCP server provides the following tools:
 
 | Tool Name               | Description                                    |
 | ----------------------- | ---------------------------------------------- |
-| search-dev-docs         | Search shopify.dev documentation               |
-| introspect-admin-schema | Access and search Shopify Admin GraphQL schema |
+| search_dev_docs         | Search shopify.dev documentation               |
+| introspect_admin_schema | Access and search Shopify Admin GraphQL schema |
 
 ## Available prompts
 
@@ -53,7 +53,7 @@ This MCP server provides the following prompts:
 
 | Prompt Name           | Description                                                 |
 | --------------------- | ----------------------------------------------------------- |
-| shopify-admin-graphql | Help you write GraphQL operations for the Shopify Admin API |
+| shopify_admin_graphql | Help you write GraphQL operations for the Shopify Admin API |
 
 ## Development
 

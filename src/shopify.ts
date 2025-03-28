@@ -88,12 +88,10 @@ export async function searchShopifyDocs(prompt: string) {
 
 export function shopifyTools(server: McpServer) {
   server.tool(
-    "introspect-admin-schema",
-    `
-    This tool introspects and returns the portion of the Shopify Admin API GraphQL schema relevant to the user prompt. Only use this for the Shopify Admin API, and not any other APIs like the Shopify Storefront API or the Shopify Functions API.
-    
-    It takes two arguments: query and filter. The query argument is the string search term to filter schema elements by name. The filter argument is an array of strings to filter results to show specific sections.
-    `,
+    "introspect_admin_schema",
+    `This tool introspects and returns the portion of the Shopify Admin API GraphQL schema relevant to the user prompt. Only use this for the Shopify Admin API, and not any other APIs like the Shopify Storefront API or the Shopify Functions API.
+
+    It takes two arguments: query and filter. The query argument is the string search term to filter schema elements by name. The filter argument is an array of strings to filter results to show specific sections.`,
     {
       query: z
         .string()
@@ -134,12 +132,10 @@ export function shopifyTools(server: McpServer) {
   );
 
   server.tool(
-    "search-dev-docs",
-    `
-    This tool will take in the user prompt, search shopify.dev, and return relevant documentation that will help answer the user's question. 
-    
-    It takes one argument: prompt, which is the search query for Shopify documentation.
-    `,
+    "search_dev_docs",
+    `This tool will take in the user prompt, search shopify.dev, and return relevant documentation that will help answer the user's question.
+
+    It takes one argument: prompt, which is the search query for Shopify documentation.`,
     {
       prompt: z.string().describe("The search query for Shopify documentation"),
     },

@@ -35,7 +35,7 @@ async function main() {
 
   // Register Shopify prompts
   server.prompt(
-    "shopify-admin-graphql",
+    "shopify_admin_graphql",
     {
       query: z
         .string()
