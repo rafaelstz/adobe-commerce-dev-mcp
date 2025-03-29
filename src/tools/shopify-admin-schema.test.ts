@@ -477,7 +477,7 @@ describe("searchShopifyAdminSchema", () => {
   beforeEach(() => {
     vol.reset();
     vol.fromJSON({
-      "./src/data/admin_schema_2025-01.json": JSON.stringify(sampleSchema),
+      "./data/admin_schema_2025-01.json": JSON.stringify(sampleSchema),
     });
   });
 
