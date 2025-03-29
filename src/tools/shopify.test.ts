@@ -5,7 +5,7 @@ import { describe, test, expect, beforeEach, vi, afterAll } from "vitest";
 global.fetch = vi.fn();
 
 // Now import the modules to test
-import { searchShopifyDocs } from "./shopify.js";
+import { searchShopifyDocs } from "./index.js";
 
 // Mock console.error and console.warn
 const originalConsoleError = console.error;
