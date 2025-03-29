@@ -475,6 +475,8 @@ describe("searchShopifyAdminSchema", () => {
   };
 
   beforeEach(() => {
+    vi.clearAllMocks();
+
     vol.reset();
     vol.fromJSON({
       "./data/admin_schema_2025-01.json": JSON.stringify(sampleSchema),
