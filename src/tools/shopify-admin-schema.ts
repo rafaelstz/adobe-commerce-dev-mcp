@@ -12,6 +12,7 @@ const __dirname = path.dirname(__filename);
 export const SCHEMA_FILE_PATH = path.join(
   __dirname,
   "..",
+  "..",
   "data",
   "admin_schema_2025-01.json"
 );

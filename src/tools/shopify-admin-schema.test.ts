@@ -1,14 +1,9 @@
 // Import vitest first
 import { describe, test, expect, beforeEach, vi, afterAll } from "vitest";
+import { vol } from "memfs";
 
-// Mock the module
-vi.mock("./shopify-admin-schema.js", async () => {
-  const actual = (await vi.importActual("./shopify-admin-schema.js")) as any;
-  return {
-    ...actual,
-    loadSchemaContent: vi.fn(),
-  };
-});
+vi.mock("node:fs");
+vi.mock("node:fs/promises");
 
 // Now import the module to test
 import {
@@ -20,7 +15,6 @@ import {
   searchShopifyAdminSchema,
   filterAndSortItems,
   MAX_FIELDS_TO_SHOW,
-  loadSchemaContent,
 } from "./shopify-admin-schema.js";
 
 // Mock console.error
@@ -483,11 +477,10 @@ describe("searchShopifyAdminSchema", () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    // Set default mock behavior to return the sample schema
-    // Since fs is imported as a default import, we need to mock it like this
-    vi.mocked(loadSchemaContent).mockResolvedValue(
-      JSON.stringify(sampleSchema)
-    );
+    vol.reset();
+    vol.fromJSON({
+      "./data/admin_schema_2025-01.json": JSON.stringify(sampleSchema),
+    });
   });
 
   test("returns formatted results for a search query", async () => {
