@@ -1,13 +1,13 @@
-# Shopify Dev MCP Server
+# Adobe Commerce Dev MCP Server
 
-This project implements a Model Context Protocol (MCP) server that interacts with Shopify Dev. This protocol supports various tools to interact with different Shopify APIs.
+This project implements a Model Context Protocol (MCP) server that interacts with Adobe Commerce. This protocol supports various tools to interact with Adobe Commerce GraphQL APIs.
 
 ## Setup
 
-To run the Shopify MCP server using npx, use the following command:
+To run the Adobe Commerce MCP server using npx, use the following command:
 
 ```bash
-npx -y @shopify/dev-mcp@latest
+npx -y @rafaelcg/adobe-commerce-dev-mcp@latest
 ```
 
 ## Usage with Cursor or Claude Desktop
@@ -17,9 +17,9 @@ Add the following configuration. For more information, read the [Cursor MCP docu
 ```json
 {
   "mcpServers": {
-    "shopify-dev-mcp": {
+    "adobe-commerce-dev-mcp": {
       "command": "npx",
-      "args": ["-y", "@shopify/dev-mcp@latest"]
+      "args": ["-y", "@rafaelcg/adobe-commerce-dev-mcp@latest"]
     }
   }
 }
@@ -30,9 +30,9 @@ On Windows, you might need to use this alternative configuration:
 ```json
 {
   "mcpServers": {
-    "shopify-dev-mcp": {
+    "adobe-commerce-dev-mcp": {
       "command": "cmd",
-      "args": ["/k", "npx", "-y", "@shopify/dev-mcp@latest"]
+      "args": ["/k", "npx", "-y", "@rafaelcg/adobe-commerce-dev-mcp@latest"]
     }
   }
 }
@@ -44,7 +44,7 @@ This MCP server provides the following tools:
 
 | Tool Name               | Description                                    |
 | ----------------------- | ---------------------------------------------- |
-| introspect_admin_schema | Access and search Shopify Admin GraphQL schema |
+| introspect_admin_schema | Access and search Adobe Commerce GraphQL schema |
 
 ## Available prompts
 
@@ -52,11 +52,11 @@ This MCP server provides the following prompts:
 
 | Prompt Name           | Description                                                 |
 | --------------------- | ----------------------------------------------------------- |
-| shopify_admin_graphql | Help you write GraphQL operations for the Shopify Admin API |
+| adobe_commerce_graphql | Help you write GraphQL operations for the Adobe Commerce API |
 
 ## Development
 
-The server is built using the MCP SDK and communicates with Shopify Dev.
+The server is built using the MCP SDK and communicates with Adobe Commerce.
 
 1. `npm install`
 1. Modify source files

@@ -1,5 +1,5 @@
 {
-  "name": "@shopify/dev-mcp",
+  "name": "@rafaelcg/adobe-commerce-dev-mcp",
   "version": "1.0.2",
   "main": "dist/index.js",
   "scripts": {
@@ -10,7 +10,7 @@
   },
   "author": "",
   "license": "ISC",
-  "description": "A command line tool for setting up Shopify Dev MCP server",
+  "description": "A command line tool for setting up Adobe Commerce MCP server",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.6.1",
     "zod": "^3.24.2"
@@ -25,7 +25,7 @@
   },
   "type": "module",
   "bin": {
-    "shopify-dev-mcp": "dist/index.js"
+    "adobe-commerce-dev-mcp": "dist/index.js"
   },
   "files": [
     "dist/**/*.js",
@@ -38,6 +38,7 @@
   "keywords": [
     "mcp",
     "modelcontextprotocol",
-    "shopify"
+    "adobe-commerce",
+    "magento"
   ]
 }

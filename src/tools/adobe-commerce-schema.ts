@@ -24,7 +24,7 @@ export async function loadSchemaContent(schemaPath: string): Promise<string> {
   // If uncompressed file doesn't exist but gzipped does, decompress it
   if (!existsSync(schemaPath) && existsSync(gzippedSchemaPath)) {
     console.error(
-      `[shopify-admin-schema-tool] Decompressing GraphQL schema from ${gzippedSchemaPath}`
+      `[adobe-commerce-schema-tool] Decompressing GraphQL schema from ${gzippedSchemaPath}`
     );
     const compressedData = await fs.readFile(gzippedSchemaPath);
     const schemaContent = zlib.gunzipSync(compressedData).toString("utf-8");
@@ -32,13 +32,13 @@ export async function loadSchemaContent(schemaPath: string): Promise<string> {
     // Save the uncompressed content to disk
     await fs.writeFile(schemaPath, schemaContent, "utf-8");
     console.error(
-      `[shopify-admin-schema-tool] Saved uncompressed schema to ${schemaPath}`
+      `[adobe-commerce-schema-tool] Saved uncompressed schema to ${schemaPath}`
     );
     return schemaContent;
   }
 
   console.error(
-    `[shopify-admin-schema-tool] Reading GraphQL schema from ${schemaPath}`
+    `[adobe-commerce-schema-tool] Reading GraphQL schema from ${schemaPath}`
   );
   return fs.readFile(schemaPath, "utf8");
 }
@@ -197,7 +197,7 @@ export const formatGraphqlOperation = (query: any): string => {
 };
 
 // Function to search and format schema data
-export async function searchShopifyAdminSchema(
+export async function searchAdobeCommerceSchema(
   query: string,
   {
     filter = ["all"],
@@ -224,7 +224,7 @@ export async function searchShopifyAdminSchema(
       normalizedQuery = normalizedQuery.replace(/\s+/g, "");
 
       console.error(
-        `[shopify-admin-schema-tool] Filtering schema with query: ${query} (normalized: ${normalizedQuery})`
+        `[adobe-commerce-schema-tool] Filtering schema with query: ${query} (normalized: ${normalizedQuery})`
       );
 
       const searchTerm = normalizedQuery.toLowerCase();
@@ -350,7 +350,7 @@ export async function searchShopifyAdminSchema(
     return { success: true as const, responseText };
   } catch (error) {
     console.error(
-      `[shopify-admin-schema-tool] Error processing GraphQL schema: ${error}`
+      `[adobe-commerce-schema-tool] Error processing GraphQL schema: ${error}`
     );
     return {
       success: false as const,

@@ -2,8 +2,8 @@
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { shopifyTools } from "./tools/index.js";
-import { shopifyPrompts } from "./prompts/index.js";
+import { adobeCommerceTools } from "./tools/index.js";
+import { adobeCommercePrompts } from "./prompts/index.js";
 import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
 import { dirname, resolve } from "path";
@@ -20,7 +20,7 @@ async function main() {
   // Create server instance
   const server = new McpServer(
     {
-      name: "shopify-dev-mcp",
+      name: "adobe-commerce-dev-mcp",
       version: VERSION,
     },
     {
@@ -30,16 +30,16 @@ async function main() {
     }
   );
 
-  // Register Shopify tools
-  shopifyTools(server);
+  // Register Adobe Commerce tools
+  adobeCommerceTools(server);
 
-  // Register Shopify prompts
-  shopifyPrompts(server);
+  // Register Adobe Commerce prompts
+  adobeCommercePrompts(server);
 
   // Connect to transport
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error(`Shopify Dev MCP Server v${VERSION} running on stdio`);
+  console.error(`Adobe Commerce Dev MCP Server v${VERSION} running on stdio`);
 }
 
 main().catch((error) => {
