@@ -130,26 +130,4 @@ export function shopifyTools(server: McpServer) {
       }
     }
   );
-
-  server.tool(
-    "search_dev_docs",
-    `This tool will take in the user prompt, search shopify.dev, and return relevant documentation that will help answer the user's question.
-
-    It takes one argument: prompt, which is the search query for Shopify documentation.`,
-    {
-      prompt: z.string().describe("The search query for Shopify documentation"),
-    },
-    async ({ prompt }, extra) => {
-      const result = await searchShopifyDocs(prompt);
-
-      return {
-        content: [
-          {
-            type: "text" as const,
-            text: result.formattedText,
-          },
-        ],
-      };
-    }
-  );
 }

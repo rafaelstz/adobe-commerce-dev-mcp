@@ -14,7 +14,7 @@ export const SCHEMA_FILE_PATH = path.join(
   "..",
   "..",
   "data",
-  "admin_schema_2025-01.json"
+  "schema_2.4.7.json"
 );
 
 // Function to load schema content, handling decompression if needed

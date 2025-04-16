@@ -44,7 +44,6 @@ This MCP server provides the following tools:
 
 | Tool Name               | Description                                    |
 | ----------------------- | ---------------------------------------------- |
-| search_dev_docs         | Search shopify.dev documentation               |
 | introspect_admin_schema | Access and search Shopify Admin GraphQL schema |
 
 ## Available prompts
