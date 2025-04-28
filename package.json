@@ -1,6 +1,6 @@
 {
   "name": "@rafaelcg/adobe-commerce-dev-mcp",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc && node -e \"require('fs').chmodSync('dist/index.js', '755')\"",

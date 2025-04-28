@@ -479,7 +479,7 @@ describe("searchAdobeCommerceSchema", () => {
 
     vol.reset();
     vol.fromJSON({
-      "./data/schema_2.4.7.json": JSON.stringify(sampleSchema),
+      "./data/schema_2-4-7.json": JSON.stringify(sampleSchema),
     });
   });
 
