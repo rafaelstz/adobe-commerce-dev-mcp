@@ -2,41 +2,31 @@
 
 This project implements a Model Context Protocol (MCP) server that interacts with Adobe Commerce. This protocol supports various tools to interact with Adobe Commerce GraphQL APIs.
 
-## Setup
+## Usage with MCP Server I Hosted on Vercel
 
-To run the Adobe Commerce MCP server using npx, use the following command:
-
-```bash
-npx -y @rafaelcg/adobe-commerce-dev-mcp@latest
-```
-
-## Usage with Cursor or Claude Desktop
-
-Add the following configuration. For more information, read the [Cursor MCP documentation](https://docs.cursor.com/context/model-context-protocol) or the [Claude Desktop MCP guide](https://modelcontextprotocol.io/quickstart/user).
+You can use this MCP server directly from the cloud, without running anything locally. Just point your MCP client (such as Cursor or Claude Desktop) to the Vercel endpoint:
 
 ```json
 {
   "mcpServers": {
-    "adobe-commerce-dev-mcp": {
+    "adobe-commerce-dev-mcp-vercel": {
       "command": "npx",
-      "args": ["-y", "@rafaelcg/adobe-commerce-dev-mcp@latest"]
+      "args": [
+        "mcp-remote",
+        "https://adobe-commerce-dev-mcp.vercel.app/api/mcp"
+      ]
     }
   }
 }
 ```
 
-On Windows, you might need to use this alternative configuration:
+- Replace the server name (`adobe-commerce-dev-mcp-vercel`) as you wish.
+- The `mcp-remote` command is used to connect to a remote MCP server.
+- The URL should point to your deployed Vercel MCP endpoint.
 
-```json
-{
-  "mcpServers": {
-    "adobe-commerce-dev-mcp": {
-      "command": "cmd",
-      "args": ["/k", "npx", "-y", "@rafaelcg/adobe-commerce-dev-mcp@latest"]
-    }
-  }
-}
-```
+**Benefits:**
+- No need to install or run anything locally.
+- Always uses the latest deployed version.
 
 ## Available tools
 
