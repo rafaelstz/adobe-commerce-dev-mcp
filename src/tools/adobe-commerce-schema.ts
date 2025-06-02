@@ -205,9 +205,10 @@ export async function searchAdobeCommerceSchema(
 ) {
   try {
     const schemaContent = await loadSchemaContent(SCHEMA_FILE_PATH);
-
+    console.error("DEBUG: First 500 chars of schema file:", schemaContent.slice(0, 500));
     // Parse the schema content
     const schemaJson = JSON.parse(schemaContent);
+    console.error("DEBUG: Top-level keys in parsed schema:", Object.keys(schemaJson));
 
     // If a query is provided, filter the schema
     let resultSchema = schemaJson;
@@ -230,12 +231,12 @@ export async function searchAdobeCommerceSchema(
       const searchTerm = normalizedQuery.toLowerCase();
 
       // Example filtering logic (adjust based on actual schema structure)
-      if (schemaJson?.data?.__schema?.types) {
+      if (schemaJson?.__schema?.types) {
         const MAX_RESULTS = 10;
 
         // Process types
         const processedTypes = filterAndSortItems(
-          schemaJson.data.__schema.types,
+          schemaJson.__schema.types,
           searchTerm,
           MAX_RESULTS
         );
@@ -243,10 +244,10 @@ export async function searchAdobeCommerceSchema(
         const limitedTypes = processedTypes.items;
 
         // Find the Query and Mutation types
-        const queryType = schemaJson.data.__schema.types.find(
+        const queryType = schemaJson.__schema.types.find(
           (type: any) => type.name === "QueryRoot"
         );
-        const mutationType = schemaJson.data.__schema.types.find(
+        const mutationType = schemaJson.__schema.types.find(
           (type: any) => type.name === "Mutation"
         );
 
@@ -284,13 +285,11 @@ export async function searchAdobeCommerceSchema(
 
         // Create a modified schema that includes matching types
         resultSchema = {
-          data: {
-            __schema: {
-              ...schemaJson.data.__schema,
-              types: limitedTypes,
-              matchingQueries,
-              matchingMutations,
-            },
+          __schema: {
+            ...schemaJson.__schema,
+            types: limitedTypes,
+            matchingQueries,
+            matchingMutations,
           },
         };
       }
@@ -305,9 +304,9 @@ export async function searchAdobeCommerceSchema(
         responseText += `(Results limited to 10 items. Refine your search for more specific results.)\n\n`;
       }
 
-      if (resultSchema.data.__schema.types.length > 0) {
+      if (resultSchema.__schema.types.length > 0) {
         responseText +=
-          resultSchema.data.__schema.types.map(formatSchemaType).join("\n\n") +
+          resultSchema.__schema.types.map(formatSchemaType).join("\n\n") +
           "\n\n";
       } else {
         responseText += "No matching types found.\n\n";
@@ -321,9 +320,9 @@ export async function searchAdobeCommerceSchema(
         responseText += `(Results limited to 10 items. Refine your search for more specific results.)\n\n`;
       }
 
-      if (resultSchema.data.__schema.matchingQueries?.length > 0) {
+      if (resultSchema.__schema.matchingQueries?.length > 0) {
         responseText +=
-          resultSchema.data.__schema.matchingQueries
+          resultSchema.__schema.matchingQueries
             .map(formatGraphqlOperation)
             .join("\n\n") + "\n\n";
       } else {
@@ -338,8 +337,8 @@ export async function searchAdobeCommerceSchema(
         responseText += `(Results limited to 10 items. Refine your search for more specific results.)\n\n`;
       }
 
-      if (resultSchema.data.__schema.matchingMutations?.length > 0) {
-        responseText += resultSchema.data.__schema.matchingMutations
+      if (resultSchema.__schema.matchingMutations?.length > 0) {
+        responseText += resultSchema.__schema.matchingMutations
           .map(formatGraphqlOperation)
           .join("\n\n");
       } else {
