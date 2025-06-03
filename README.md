@@ -1,6 +1,18 @@
-# Adobe Commerce Dev MCP Server
+<div align="center">
+  <img src="https://i.imgur.com/NAcOzwF.jpeg" alt="Adobe Commerce Dev MCP" />
+</div>
 
+<div align="center">
+
+# Adobe Commerce Dev MCP Server
 This project implements a Model Context Protocol (MCP) server that interacts with Adobe Commerce. This protocol supports various tools to interact with Adobe Commerce GraphQL APIs.
+</div>
+
+<div align="center">
+  <a href="https://youtu.be/BP5Qx6hIIKc" target="_blank">
+    <img src="https://img.youtube.com/vi/BP5Qx6hIIKc/0.jpg" alt="How to use Adobe Commerce Dev MCP Server" style="max-width: 100%; height: auto;" />
+  </a>
+</div>
 
 ## Usage with MCP Server I Hosted on Vercel
 
@@ -53,6 +65,21 @@ The server is built using the MCP SDK and communicates with Adobe Commerce.
 1. Run `npm run build` to compile
 1. Run `npm run test` to run tests
 1. Add an MCP server that runs this command: `node <absolute_path_of_project>/dist/index.js`
+
+Set it up locally for test as below changing the file location in the *args* parameter:
+
+```
+{
+  "mcpServers": {
+    "adobe-commerce-dev-mcp": {
+      "command": "node",
+      "args": [
+        "/Users/rafael/Herd/shopify-dev-mcp/dist/index.js"
+      ]
+    },
+  }
+}
+```
 
 ## License
 
