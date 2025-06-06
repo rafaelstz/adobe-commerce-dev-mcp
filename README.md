@@ -14,31 +14,37 @@ This project implements a Model Context Protocol (MCP) server that interacts wit
   </a>
 </div>
 
-## Usage with MCP Server I Hosted on Vercel
+## Usage with MCP Server via NPM Package
 
-You can use this MCP server directly from the cloud, without running anything locally. Just point your MCP client (such as Cursor or Claude Desktop) to the Vercel endpoint:
+You can use this MCP server directly without downloading or hosting anything yourself. Simply configure your MCP client (such as Cursor or Claude Desktop) to use the NPM package:
 
 ```json
 {
   "mcpServers": {
-    "adobe-commerce-dev-mcp-vercel": {
+    "adobe-commerce-dev-mcp": {
       "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://adobe-commerce-dev-mcp.vercel.app/api/mcp"
-      ]
+      "args": ["-y", "@rafaelcg/adobe-commerce-dev-mcp@latest"]
     }
   }
 }
 ```
 
-- Replace the server name (`adobe-commerce-dev-mcp-vercel`) as you wish.
-- The `mcp-remote` command is used to connect to a remote MCP server.
-- The URL should point to your deployed Vercel MCP endpoint.
+- Replace the server name (`adobe-commerce-dev-mcp`) as you wish.
+- The `npx` command will always use the latest version of the MCP server from NPM.
+- No need to install or host anything locally or remotely.
 
-**Benefits:**
-- No need to install or run anything locally.
-- Always uses the latest deployed version.
+On Windows, you might need to use this alternative configuration:
+
+```json
+{
+  "mcpServers": {
+    "adobe-commerce-dev-mcp": {
+      "command": "cmd",
+      "args": ["/k", "npx", "-y", "@rafaelcg/adobe-commerce-dev-mcp@latest"]
+    }
+  }
+}
+```
 
 ## Available tools
 
