@@ -28,6 +28,7 @@ You can use this MCP server directly without downloading or hosting anything you
   }
 }
 ```
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=adobe-commerce-dev-mcp&config=eyJjb21tYW5kIjoibnB4IC15IEByYWZhZWxjZy9hZG9iZS1jb21tZXJjZS1kZXYtbWNwQGxhdGVzdCJ9)
 
 - Replace the server name (`adobe-commerce-dev-mcp`) as you wish.
 - The `npx` command will always use the latest version of the MCP server from NPM.
@@ -45,6 +46,7 @@ On Windows, you might need to use this alternative configuration:
   }
 }
 ```
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=adobe-commerce-dev-mcp&config=eyJjb21tYW5kIjoiY21kIC9rIG5weCAteSBAcmFmYWVsY2cvYWRvYmUtY29tbWVyY2UtZGV2LW1jcEBsYXRlc3QifQ%3D%3D)
 
 ## Available tools
 
