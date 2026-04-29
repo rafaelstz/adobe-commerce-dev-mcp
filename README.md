@@ -82,7 +82,7 @@ Set it up locally for test as below changing the file location in the *args* par
     "adobe-commerce-dev-mcp": {
       "command": "node",
       "args": [
-        "/Users/rafael/Herd/shopify-dev-mcp/dist/index.js"
+        "/Users/rafael/Herd/adobe-commerce-dev-mcp/dist/index.js"
       ]
     },
   }
