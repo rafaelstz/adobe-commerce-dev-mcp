@@ -2,7 +2,7 @@
   "mcpServers": {
     "adobe-commerce-dev-mcp": {
       "command": "node",
-      "args": ["src/index.ts"]
+      "args": ["dist/index.js"]
     }
   }
 }
