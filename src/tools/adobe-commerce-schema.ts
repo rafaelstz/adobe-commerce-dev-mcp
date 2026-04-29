@@ -17,8 +17,15 @@ export const SCHEMA_FILE_PATH = path.join(
   "schema_2-4-7.json"
 );
 
+// In-memory cache for the loaded schema content
+let cachedSchemaContent: string | null = null;
+
 // Function to load schema content, handling decompression if needed
 export async function loadSchemaContent(schemaPath: string): Promise<string> {
+  if (cachedSchemaContent) {
+    return cachedSchemaContent;
+  }
+
   const gzippedSchemaPath = `${schemaPath}.gz`;
 
   // If uncompressed file doesn't exist but gzipped does, decompress it
@@ -34,13 +41,16 @@ export async function loadSchemaContent(schemaPath: string): Promise<string> {
     console.error(
       `[adobe-commerce-schema-tool] Saved uncompressed schema to ${schemaPath}`
     );
+    cachedSchemaContent = schemaContent;
     return schemaContent;
   }
 
   console.error(
     `[adobe-commerce-schema-tool] Reading GraphQL schema from ${schemaPath}`
   );
-  return fs.readFile(schemaPath, "utf8");
+  const schemaContent = await fs.readFile(schemaPath, "utf8");
+  cachedSchemaContent = schemaContent;
+  return schemaContent;
 }
 
 // Maximum number of fields to extract from an object
@@ -205,13 +215,16 @@ export async function searchAdobeCommerceSchema(
 ) {
   try {
     const schemaContent = await loadSchemaContent(SCHEMA_FILE_PATH);
-    console.error("DEBUG: First 500 chars of schema file:", schemaContent.slice(0, 500));
     // Parse the schema content
     const schemaJson = JSON.parse(schemaContent);
-    console.error("DEBUG: Top-level keys in parsed schema:", Object.keys(schemaJson));
+
+    // Support both { __schema: ... } and { data: { __schema: ... } } formats
+    const schemaData = schemaJson.data?.__schema
+      ? schemaJson.data
+      : schemaJson;
 
     // If a query is provided, filter the schema
-    let resultSchema = schemaJson;
+    let resultSchema = schemaData;
     let wasTruncated = false;
     let queriesWereTruncated = false;
     let mutationsWereTruncated = false;
@@ -230,13 +243,12 @@ export async function searchAdobeCommerceSchema(
 
       const searchTerm = normalizedQuery.toLowerCase();
 
-      // Example filtering logic (adjust based on actual schema structure)
-      if (schemaJson?.__schema?.types) {
+      if (schemaData?.__schema?.types) {
         const MAX_RESULTS = 10;
 
         // Process types
         const processedTypes = filterAndSortItems(
-          schemaJson.__schema.types,
+          schemaData.__schema.types,
           searchTerm,
           MAX_RESULTS
         );
@@ -244,10 +256,10 @@ export async function searchAdobeCommerceSchema(
         const limitedTypes = processedTypes.items;
 
         // Find the Query and Mutation types
-        const queryType = schemaJson.__schema.types.find(
+        const queryType = schemaData.__schema.types.find(
           (type: any) => type.name === "QueryRoot"
         );
-        const mutationType = schemaJson.__schema.types.find(
+        const mutationType = schemaData.__schema.types.find(
           (type: any) => type.name === "Mutation"
         );
 
@@ -286,7 +298,7 @@ export async function searchAdobeCommerceSchema(
         // Create a modified schema that includes matching types
         resultSchema = {
           __schema: {
-            ...schemaJson.__schema,
+            ...schemaData.__schema,
             types: limitedTypes,
             matchingQueries,
             matchingMutations,
