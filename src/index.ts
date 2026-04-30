@@ -30,12 +30,10 @@ async function main() {
     }
   );
 
-  // Register Adobe Commerce tools
+  // Register Adobe Commerce tools and prompts
   const version = process.env.ADOBE_COMMERCE_VERSION || "2.4.8";
   adobeCommerceTools(server, version);
-
-  // Register Adobe Commerce prompts
-  adobeCommercePrompts(server);
+  adobeCommercePrompts(server, version);
 
   // Connect to transport
   const transport = new StdioServerTransport();
