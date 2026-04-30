@@ -3,3 +3,4 @@ dist/
 data/**/*.json
 !data/**/*.json.gz
 .DS_Store
+.claude/worktrees
