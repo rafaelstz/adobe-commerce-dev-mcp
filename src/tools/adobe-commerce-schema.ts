@@ -8,22 +8,29 @@ import { existsSync } from "fs";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Path to the schema file in the data folder
-export const SCHEMA_FILE_PATH = path.join(
-  __dirname,
-  "..",
-  "..",
-  "data",
-  "schema_2-4-7.json"
-);
+export const DEFAULT_VERSION = "2.4.8";
 
-// In-memory cache for the loaded schema content
-let cachedSchemaContent: string | null = null;
+// Returns the GraphQL schema file path for the given Adobe Commerce version
+export function getGraphqlSchemaPath(version: string): string {
+  const v = version.replace(/\./g, "-");
+  return path.join(__dirname, "..", "..", "data", `schema_${v}.json`);
+}
+
+// Path to the default schema file (2.4.8)
+export const SCHEMA_FILE_PATH = getGraphqlSchemaPath(DEFAULT_VERSION);
+
+// In-memory cache keyed by file path
+const schemaCache = new Map<string, string>();
+
+// Clear the cache — used in tests
+export function clearSchemaCache(): void {
+  schemaCache.clear();
+}
 
 // Function to load schema content, handling decompression if needed
 export async function loadSchemaContent(schemaPath: string): Promise<string> {
-  if (cachedSchemaContent) {
-    return cachedSchemaContent;
+  if (schemaCache.has(schemaPath)) {
+    return schemaCache.get(schemaPath)!;
   }
 
   const gzippedSchemaPath = `${schemaPath}.gz`;
@@ -41,7 +48,7 @@ export async function loadSchemaContent(schemaPath: string): Promise<string> {
     console.error(
       `[adobe-commerce-schema-tool] Saved uncompressed schema to ${schemaPath}`
     );
-    cachedSchemaContent = schemaContent;
+    schemaCache.set(schemaPath, schemaContent);
     return schemaContent;
   }
 
@@ -49,7 +56,7 @@ export async function loadSchemaContent(schemaPath: string): Promise<string> {
     `[adobe-commerce-schema-tool] Reading GraphQL schema from ${schemaPath}`
   );
   const schemaContent = await fs.readFile(schemaPath, "utf8");
-  cachedSchemaContent = schemaContent;
+  schemaCache.set(schemaPath, schemaContent);
   return schemaContent;
 }
 
@@ -211,10 +218,15 @@ export async function searchAdobeCommerceSchema(
   query: string,
   {
     filter = ["all"],
-  }: { filter?: Array<"all" | "types" | "queries" | "mutations"> } = {}
+    version = DEFAULT_VERSION,
+  }: {
+    filter?: Array<"all" | "types" | "queries" | "mutations">;
+    version?: string;
+  } = {}
 ) {
   try {
-    const schemaContent = await loadSchemaContent(SCHEMA_FILE_PATH);
+    const schemaPath = getGraphqlSchemaPath(version);
+    const schemaContent = await loadSchemaContent(schemaPath);
     // Parse the schema content
     const schemaJson = JSON.parse(schemaContent);
 

@@ -31,7 +31,8 @@ async function main() {
   );
 
   // Register Adobe Commerce tools
-  adobeCommerceTools(server);
+  const version = process.env.ADOBE_COMMERCE_VERSION || "2.4.8";
+  adobeCommerceTools(server, version);
 
   // Register Adobe Commerce prompts
   adobeCommercePrompts(server);

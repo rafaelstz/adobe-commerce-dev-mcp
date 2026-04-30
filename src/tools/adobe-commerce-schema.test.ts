@@ -14,6 +14,7 @@ import {
   formatGraphqlOperation,
   searchAdobeCommerceSchema,
   filterAndSortItems,
+  clearSchemaCache,
   MAX_FIELDS_TO_SHOW,
 } from "./adobe-commerce-schema.js";
 
@@ -476,9 +477,11 @@ describe("searchAdobeCommerceSchema", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    clearSchemaCache();
 
     vol.reset();
     vol.fromJSON({
+      "./data/schema_2-4-8.json": JSON.stringify(sampleSchema),
       "./data/schema_2-4-7.json": JSON.stringify(sampleSchema),
     });
   });
@@ -627,5 +630,26 @@ describe("searchAdobeCommerceSchema", () => {
     // Should include mutations section
     expect(result.responseText).toContain("## Matching GraphQL Mutations:");
     expect(result.responseText).toContain("productCreate");
+  });
+
+  test("uses 2.4.8 schema by default", async () => {
+    const result = await searchAdobeCommerceSchema("product");
+    expect(result.success).toBe(true);
+    expect(result.responseText).toContain("OBJECT Product");
+  });
+
+  test("switches to 2.4.7 schema when version is specified", async () => {
+    const result = await searchAdobeCommerceSchema("product", {
+      version: "2.4.7",
+    });
+    expect(result.success).toBe(true);
+    expect(result.responseText).toContain("OBJECT Product");
+  });
+
+  test("returns error when schema file for version does not exist", async () => {
+    const result = await searchAdobeCommerceSchema("product", {
+      version: "2.4.5",
+    });
+    expect(result.success).toBe(false);
   });
 });
