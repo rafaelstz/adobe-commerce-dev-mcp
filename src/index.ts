@@ -30,8 +30,14 @@ async function main() {
     }
   );
 
-  // Register Adobe Commerce tools and prompts
-  const version = process.env.ADOBE_COMMERCE_VERSION || "2.4.8";
+  // Resolve Adobe Commerce version from env var or CLI argument
+  // Supports both:
+  //   env:  ADOBE_COMMERCE_VERSION=2.4.7 (MCP config "env" block)
+  //   args: ADOBE_COMMERCE_VERSION=2.4.7 (MCP Inspector "Arguments" field)
+  const argVersion = process.argv
+    .find((arg) => arg.startsWith("ADOBE_COMMERCE_VERSION="))
+    ?.split("=")[1];
+  const version = process.env.ADOBE_COMMERCE_VERSION || argVersion || "2.4.8";
   adobeCommerceTools(server, version);
   adobeCommercePrompts(server, version);
 
